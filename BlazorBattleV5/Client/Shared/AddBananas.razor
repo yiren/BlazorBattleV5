@@ -1,0 +1,11 @@
+﻿<button class="btn btn-info" @onclick="IncreaseBanana">+</button>
+
+@code {
+    [Parameter]
+    public EventCallback<int> BananaAdded { get; set; }
+
+    public void IncreaseBanana()
+    {
+        BananaAdded.InvokeAsync(10);
+    }
+}
