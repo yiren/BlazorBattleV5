@@ -1,11 +1,10 @@
-﻿<button class="btn btn-info" @onclick="IncreaseBanana">+</button>
+﻿@inject Services.IBananaService BananaService;
+<button class="btn btn-info" @onclick="()=>EarnBananas(20)">+</button>
 
 @code {
-    [Parameter]
-    public EventCallback<int> BananaAdded { get; set; }
-
-    public void IncreaseBanana()
+    
+    public void EarnBananas(int value)
     {
-        BananaAdded.InvokeAsync(10);
+        BananaService.AddBananas(value);
     }
 }
