@@ -1,14 +1,26 @@
 ﻿@inject Services.IBananaService BananaService
 @implements IDisposable
-<div class="top-menu">
-    <img src="icons/I_C_Banana.png" alt="" /><span class="popover-header">@BananaService.Banana</span>
-    <AddBananas/>
-</div>
+
+<AuthorizeView>
+        <Authorized>
+            <div class="top-menu">
+                <img src="icons/I_C_Banana.png" alt="" /><span class="popover-header">@BananaService.Banana</span>
+                <AddBananas/>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <NavLink class="nav-link" href="/login">
+                <MudIcon Icon="@Icons.Material.Filled.Login" /> Login
+            </NavLink> 
+            <MudDivider Vertical="true" DividerType="DividerType.Inset"  />
+             <NavLink class="nav-link" href="/register">
+                <MudIcon Icon="fas fa-pen-nib" Size="Size.Small"/> Register
+            </NavLink>
+        </NotAuthorized>
+</AuthorizeView>
 
 
 @code {
-
-    
 
     protected override void OnInitialized()
     {

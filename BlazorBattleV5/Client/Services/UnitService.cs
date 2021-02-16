@@ -3,12 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using MudBlazor;
 namespace BlazorBattleV5.Client.Services
 {
     public class UnitService : IUnitService
     {
-        public IList<Unit> Units { get;} = new List<Unit>
+        public ISnackbar SnackBar { get; }
+        public UnitService(ISnackbar snackBar)
+        {
+            this.SnackBar = snackBar;
+
+        }
+        public IList<Unit> Units { get; } = new List<Unit>
         {
             new Unit { UnitId=1, Title="Knight", Attack=10, Defense=10, BananaCost=100},
             new Unit { UnitId = 2, Title = "Archer", Attack = 15, Defense = 5, BananaCost = 150 },
@@ -21,6 +27,7 @@ namespace BlazorBattleV5.Client.Services
         {
             Unit unit = Units.First(u => u.UnitId == unitId);
             MyUnits.Add(new UserUnit { UnitId = unit.UnitId, HitPoints = unit.HitPoints });
+            SnackBar.Add($"Unit:{unit.Title} Added Successfully!", Severity.Success);
         }
     }
 }

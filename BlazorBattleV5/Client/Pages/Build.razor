@@ -1,7 +1,9 @@
 ﻿@page "/build"
+@using Microsoft.AspNetCore.Authorization
 @inject Services.IBananaService BananaService
 @inject Services.IUnitService UnitService
-
+@inject MudBlazor.ISnackbar SnackBar
+@attribute [Authorize]
 <h3>Build</h3>
 
 <div class="form-group">
@@ -15,16 +17,31 @@
 </div>
 
 <button class="btn btn-warning" @onclick="BuildUnit">Build</button>
-
+<div>
+    @if(moreBananaRequired){
+        <p style="color:red;">Not Enough Bananas!</p>
+    }
+</div>
 @code {
 
     int selectedUnitId = 1;
 
+    bool moreBananaRequired = false;
+
     public void BuildUnit()
     {
         Unit selectedUnit = UnitService.Units.FirstOrDefault(u => u.UnitId == selectedUnitId);
+        if(BananaService.Banana < selectedUnit.BananaCost){
+            SnackBar.Add("Not Enough Bananas!", MudBlazor.Severity.Error);
+            moreBananaRequired=true;
+            return;
+        }
+        moreBananaRequired = false;
         BananaService.EatBananas(selectedUnit.BananaCost);
         UnitService.AddUnit(selectedUnitId);
+        
     }
+
+
 
 }

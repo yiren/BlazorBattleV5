@@ -1,0 +1,25 @@
+﻿@page "/army"
+@inject Services.IUnitService UnitService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+<h3>Army</h3>
+
+@foreach(var userUnit in UnitService.MyUnits)
+{
+    <div class="army-list">
+        <div>
+            @switch (userUnit.UnitId)
+            {
+                case 1: <img src="icons/W_Sword006.png"> break;
+                case 2: <img src="icons/S_Bow08.png"> break;
+                case 3: <img src="icons/C_Hat01.png"> break;
+            }
+        </div>
+        <div>@UnitService.Units.First(unit=> unit.UnitId == userUnit.UnitId).Title</div>
+        <div>@userUnit.HitPoints HP</div>
+    </div>
+}
+
+@code {
+    
+}

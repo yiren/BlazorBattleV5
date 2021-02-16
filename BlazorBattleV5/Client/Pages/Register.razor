@@ -1,0 +1,68 @@
+@page "/register"
+@inject Services.IUnitService UnitService
+@inject NavigationManager NavManager
+<h3>Register</h3>
+
+<div>
+    <EditForm Model="@model" OnValidSubmit="HandleFormSubmit">
+        <DataAnnotationsValidator />
+        <MudCard>
+            <MudCardContent>
+                
+                <MudTextField Label="Email" Class="mt-3"
+                              @bind-Value="model.Email" For="@(() => model.Email)" />
+                <MudTextField Label="Username" HelperText="Max. 20 characters"
+                              @bind-Value="model.Username" For="@(() => model.Username)" />
+                <MudTextField Label="Password" HelperText="Choose a strong password" Class="mt-3"
+                              @bind-Value="model.Password" For="@(() => model.Password)" InputType="InputType.Password" />
+                <MudTextField Label="Re-Password" HelperText="Repeat the password" Class="mt-3"
+                              @bind-Value="model.ConfirmPassword" For="@(() => model.ConfirmPassword)" InputType="InputType.Password" />
+                
+                <MudTextField T="string" Label="User Bio" Variant="Variant.Text" @bind-Value="model.Bio" HelperText="Input Description for the user" Lines="3" />
+                <MudSelect T="string" Label="Start Unit" @bind-Value="model.StartUnitId">
+                    @foreach (var unit in UnitService.Units)
+                    {
+                        <MudSelectItem Value="unit.UnitId.ToString()" >@(unit.Title)</MudSelectItem>    
+                    }
+                    
+                </MudSelect>
+                <MudSlider @bind-Value="model.Bananas" Min="0" Max="500">Bananas: @model.Bananas.ToString()</MudSlider>
+                <MudSwitch @bind-Checked="model.Confirmed" Color="Color.Secondary" Label="Confirmed?" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+            </MudCardActions>
+        </MudCard>
+        <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
+            Fill out the form correctly to see the success message.
+        </MudText>
+
+        <MudExpansionPanels>
+            <MudExpansionPanel Text="Show Validation Summary">
+                @if (IsValid)
+                {
+                    <MudText Color="Color.Success">Success</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+    </EditForm>
+</div>
+
+
+
+@code {
+    bool IsValid;
+    private UserRegister model = new UserRegister();
+
+    void HandleFormSubmit(){
+        Console.WriteLine($"{model.Username}//{model.Password} initialized with Bananas:{model.Bananas} and Unit:{model.StartUnitId}");
+        NavManager.NavigateTo("/");
+    }   
+    
+}

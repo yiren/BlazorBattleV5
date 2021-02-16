@@ -1,0 +1,19 @@
+@page "/logout"
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
+@inject NavigationManager navManager
+@inject AuthenticationStateProvider AuthstateProvider
+
+<h3>Confirm Logout</h3>
+
+<MudButton Variant="Variant.Outlined" Color="Color.Secondary" @onclick="SignOut">Logout</MudButton>
+
+@code{
+
+    async void SignOut(){
+        await localStorageService.RemoveItemAsync("IsAuthenticated");
+        await AuthstateProvider.GetAuthenticationStateAsync();
+        navManager.NavigateTo("/");
+        
+    }
+
+}

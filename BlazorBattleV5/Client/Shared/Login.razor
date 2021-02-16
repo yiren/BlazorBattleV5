@@ -1,0 +1,51 @@
+
+@inject NavigationManager NavManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
+@inject AuthenticationStateProvider AuthStateProvider
+<h3>Login</h3>
+
+<EditForm Model="@user" OnValidSubmit="onLogin">
+    <DataAnnotationsValidator />
+    <MudCard>
+            <MudCardContent>
+                <MudTextField Label="Username" HelperText=""
+                              @bind-Value="user.Username" For="@(() => user.Username)" />
+                <MudTextField Label="Password" HelperText="Input password" Class="mt-3"
+                              @bind-Value="user.Password" For="@(() => user.Password)" InputType="InputType.Password" />
+            </MudCardContent>
+            <MudCardActions>
+                <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Login</MudButton>
+            </MudCardActions>
+        </MudCard>
+        <MudText Typo="Typo.body2" Align="Align.Center" Class="my-4">
+            Fill out the form correctly to see the success message.
+        </MudText>
+
+        <MudExpansionPanels>
+            <MudExpansionPanel Text="Show Validation Summary">
+                @if (isValid)
+                {
+                    <MudText Color="Color.Success">Success</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudExpansionPanel>
+        </MudExpansionPanels>
+</EditForm>
+
+
+@code {
+    bool isValid;
+    private UserLogin user = new UserLogin();
+    private async void onLogin(){
+
+        await localStorageService.SetItemAsync<bool>("IsAuthenticated", true);
+        await AuthStateProvider.GetAuthenticationStateAsync();
+        NavManager.NavigateTo("/");
+        
+    }
+}
